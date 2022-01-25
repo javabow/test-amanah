@@ -22,6 +22,8 @@ Route::post('inventory-store', [InventoryController::class, 'store'])->name('inv
 Route::post('inventory-update', [InventoryController::class, 'update'])->name('inventory_update');
 Route::post('inventory-delete', [InventoryController::class, 'destroy'])->name('inventory_delete');
 
+Route::post('purchase-inventory-item', [InventoryController::class, 'purchaseStok'])->name('purchase_inventory_item');
+
 Route::post('secret-check', [InventoryController::class, 'secretNumber'])->name('secret_check');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

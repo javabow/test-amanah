@@ -14,6 +14,24 @@ class InventoryController extends Controller
         return view("backend_mazer.dashboard.inventory");
     }
 
+    public function purchaseStok(Request $request)
+    {
+        $validatedData = $request->validate([
+            'id_barang' => ['required', 'numeric'],
+            'purchase_stok' => ['required', 'numeric'],
+        ]);
+
+        try {
+            $up_inventory = Inventory::FindOrFail($request->id_barang);
+            $up_inventory->stok = $up_inventory->stok + $request->purchase_stok;
+            $up_inventory->update();
+
+            return response()->json(array('success' => true, 'last_update_id' => $up_inventory->id), 200);
+        } catch (\Exception $e) {
+            return response()->json(array('success' => false), 401);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

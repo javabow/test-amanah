@@ -50,6 +50,54 @@
     <!-- Basic Tables end -->
     </div>
 
+    <!-- Vertically purchase modal Modal -->
+    <div class="modal fade" id="purchaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <form action="#" method="post" id="form_inventory_purchase" class="form_inventory_purchase">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Purchase Stock Item
+                        </h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="purchase_stok">Purchase Stock</label>
+                                <input type="number" class="form-control" id="purchase_stok" name="purchase_stok"
+                                    placeholder="Number of Purchased Stock" value=""
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                    required>
+                                <div class="valid-feedback">
+                                    <i class="bx bx-radio-circle"></i>
+                                    Valid
+                                </div>
+                            </div>
+                            <input type="hidden" class="form-control" id="id_barang" name="id_barang">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Close</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Purchase</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End of Vertically purchase modal Modal -->
+
     <!-- Vertically delete modal Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
@@ -294,6 +342,43 @@
         });
     </script>
     <script>
+        $(document).on('click', '.purchaseBtn', function(e) {
+            e.preventDefault();
+            purchase_id = $(this).attr("id");
+            $(".form_inventory_purchase input[name=id_barang]").val(purchase_id);
+        });
+    </script>
+    <script>
+        // jQuery, bind an event handler or use some other way to trigger ajax call.
+        $('.form_inventory_purchase').submit(function(event) {
+            event.preventDefault();
+            var table_event = $('#table1').DataTable();
+            $.ajax({
+                url: '{{ route('purchase_inventory_item') }}',
+                type: 'post',
+                data: $('.form_inventory_purchase')
+                    .serialize(), // Remember that you need to have your csrf token included
+                dataType: 'json',
+                success: function(_response) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Purchased and Stock Updated to database !"
+                    })
+                    $('#purchaseModal').modal('hide');
+                    table_event.ajax.reload(null, false);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error trying to access data to database !"
+                    })
+                }
+            });
+        });
+    </script>
+    <script>
         // jQuery, bind an event handler or use some other way to trigger ajax call.
         $('.form_event').submit(function(event) {
             event.preventDefault();
@@ -427,7 +512,8 @@
                     {
                         data: 'id',
                         name: 'id',
-                        searchable: true
+                        searchable: true,
+                        width: "5%"
                     },
 
                     {
@@ -445,17 +531,22 @@
                     {
                         data: 'stok',
                         name: 'stok',
-                        searchable: true
+                        searchable: true,
+                        width: "10%"
                     },
 
                     {
                         data: null,
                         width: "13%",
+                        width: "20%",
                         render: function(data, type, row) {
                             // Combine the first and last names into a single table field
                             return '<div class="button" style="padding: 10px;"><a href="#" class="btn btn-danger deleteBtn" id=' +
                                 data.id +
                                 ' style="float: right;padding: 10px" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>' +
+                                ' <a href="#" class="btn btn-info purchaseBtn" id=' +
+                                data.id +
+                                ' style="float: right;padding: 10px;margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#purchaseModal">Purchase</a></div>' +
                                 ' <a href="#" class="btn btn-info editBtn" id=' +
                                 data.id +
                                 ' style="float: right;padding: 10px;margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#inventoryModalEdit">Edit</a></div>';
