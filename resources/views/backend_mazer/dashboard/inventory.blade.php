@@ -341,7 +341,7 @@
                         icon: "success",
                         title: "Updated to database !"
                     })
-                    $('#inventoryModalAdd').modal('hide');
+                    $('#inventoryModalEdit').modal('hide');
                     table_event.ajax.reload(null, false);
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
