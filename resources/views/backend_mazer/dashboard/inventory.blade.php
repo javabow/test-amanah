@@ -413,7 +413,7 @@
                 // ajax: "http://127.0.0.1:8000/api/client/",
 
                 "ajax": {
-                    "url": "http://127.0.0.1:8000/api/inventory-list/",
+                    "url": "{{ route('inventory_table') }}",
                     "type": "GET",
                     // "Authorization": "Bearer 3|Yk6ETwZFHz3gG8fah0KhNfuOw2EE38Nw2RGWwOzG"
                     // "crossDomain": false
