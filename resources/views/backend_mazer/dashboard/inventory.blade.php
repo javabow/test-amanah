@@ -268,7 +268,6 @@
                 success: function(data) {
                     // data = JSON.parse(response);
                     // $("#form_inventory_edit #location").val("Hello World!");
-                    console.log(data.data[0].title);
                     $(".form_inventory_edit input[name=nama_barang]").val(data.data[0].nama_barang);
                     $(".form_inventory_edit input[name=harga]").val(data.data[0].harga);
                     $(".form_inventory_edit input[name=stok]").val(data.data[0].stok);
