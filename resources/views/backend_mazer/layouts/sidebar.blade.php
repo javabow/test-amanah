@@ -30,6 +30,13 @@
                      </a>
                  </li>
 
+                 <li class="sidebar-item {{ Route::currentRouteNamed('admin.secret_number') ? 'active' : '' }}">
+                     <a href="{{ route('admin.secret_number') }}" class='sidebar-link'>
+                         <i class="bi bi-grid-fill"></i>
+                         <span>Secret Number</span>
+                     </a>
+                 </li>
+
                  {{-- <li class="sidebar-item  has-sub">
                      <a href="#" class='sidebar-link'>
                          <i class="bi bi-stack"></i>

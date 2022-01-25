@@ -20,6 +20,9 @@ Route::get('inventory-list', [InventoryController::class, 'show'])->name('invent
 Route::post('inventory-data-id', [InventoryController::class, 'getDataId'])->name('inventory_data_id'); //post to get edit data
 Route::post('inventory-store', [InventoryController::class, 'store'])->name('inventory_store'); //get all data event
 Route::post('inventory-update', [InventoryController::class, 'update'])->name('inventory_update');
+Route::post('inventory-delete', [InventoryController::class, 'destroy'])->name('inventory_delete');
+
+Route::post('secret-check', [InventoryController::class, 'secretNumber'])->name('secret_check');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

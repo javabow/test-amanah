@@ -119,8 +119,50 @@ class InventoryController extends Controller
      * @param  \App\Models\Inventory  $inventory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Inventory $inventory)
+    public function destroy(Request $request, Inventory $inventory)
     {
-        //
+
+        try {
+            $up_inventory = Inventory::FindOrFail($request->id_delete);
+
+            $up_inventory->delete();
+
+            return response()->json(array('success' => true, 'last_update_id' => $up_inventory->id), 200);
+        } catch (\Exception $e) {
+            return response()->json(array('success' => false), 401);
+        }
+    }
+
+    public function secretNumberIndex()
+    {
+        return view("backend_mazer.dashboard.secret_number");
+    }
+
+    public function secretNumber(Request $request)
+    {
+        $validatedData = $request->validate([
+            'secret' => ['required', 'numeric'],
+        ]);
+
+        try {
+            $split_int = str_split($request->secret);
+
+            $secret_array = [2, 5, 8, 3, 4];
+
+            $alhamdulillah = 0;
+            $subhanallah = 0;
+
+            foreach ($secret_array as $key => $value) {
+                if ($value == $split_int[$key]) {
+                    $alhamdulillah++;
+                } else {
+                    $subhanallah++;
+                }
+            }
+
+            return response()->json(array('success' => true, 'alhamdulillah' => $alhamdulillah, "subhanallah" => $subhanallah), 200);
+        } catch (\Exception $e) {
+            return response()->json(array('success' => false), 401);
+        }
     }
 }

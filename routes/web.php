@@ -62,6 +62,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'auth:admin
 
     //event
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.table');
+    Route::get('/secret-number', [InventoryController::class, 'secretNumberIndex'])->name('secret_number');
 });
 
 // client

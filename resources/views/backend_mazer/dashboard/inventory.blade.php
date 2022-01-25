@@ -50,9 +50,49 @@
     <!-- Basic Tables end -->
     </div>
 
-    <!-- Vertically event insert modal Modal -->
-    <div class="modal fade" id="inventoryModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    <!-- Vertically delete modal Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <form action="#" method="post" id="form_inventory_delete" class="form_inventory_delete">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Delete Inventory
+                        </h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>are you sure want to delete this data ?</p>
+                            </div>
+                            <input type="hidden" class="form-control" id="id_delete" name="id_delete">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Close</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End of Vertically delete modal Modal -->
+
+    <!-- Vertically event insert modal Modal -->
+    <div class="modal fade" id="inventoryModalEdit" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <form action="#" method="post" id="form_inventory_edit" class="form_inventory_edit">
@@ -79,7 +119,9 @@
                             <div class="col-md-12">
                                 <label for="harga">Harga</label>
                                 <input type="number" class="form-control" id="harga" name="harga"
-                                    placeholder="Harga Barang" value="" required>
+                                    placeholder="Harga Barang" value=""
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                    required>
                                 <div class="valid-feedback">
                                     <i class="bx bx-radio-circle"></i>
                                     Valid
@@ -88,7 +130,9 @@
                             <div class="col-md-12">
                                 <label for="stok">Stok</label>
                                 <input type="number" class="form-control" id="stok" name="stok" placeholder="Stok Barang"
-                                    value="" required>
+                                    value=""
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                    required>
                                 <div class="valid-feedback">
                                     <i class="bx bx-radio-circle"></i>
                                     Valid
@@ -144,7 +188,9 @@
                             <div class="col-md-12">
                                 <label for="harga">Harga</label>
                                 <input type="number" class="form-control" id="harga" name="harga"
-                                    placeholder="Harga Barang" value="" required>
+                                    placeholder="Harga Barang" value=""
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                    required>
                                 <div class="valid-feedback">
                                     <i class="bx bx-radio-circle"></i>
                                     Valid
@@ -153,7 +199,9 @@
                             <div class="col-md-12">
                                 <label for="stok">Stok</label>
                                 <input type="number" class="form-control" id="stok" name="stok" placeholder="Stok Barang"
-                                    value="" required>
+                                    value=""
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                    required>
                                 <div class="valid-feedback">
                                     <i class="bx bx-radio-circle"></i>
                                     Valid
@@ -186,6 +234,23 @@
     <script src="{{ asset('backend_mazer/vendors/jquery-datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('backend_mazer/vendors/jquery-datatables/custom.jquery.dataTables.bootstrap5.min.js') }}">
     </script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script> --}}
+    <script>
+        // jQuery(function($) {
+        //     $('#harga').autoNumeric('init');
+        // });
+        // $(document).ready(function() {
+
+        //     var autoNumericInstance = new AutoNumeric('#harga', AutoNumeric.getPredefinedOptions().numericPos
+        //         .dotDecimalCharCommaSeparator);
+
+        //     $('#harga').on('keyup', function() {
+        //         $('#harga').val(autoNumericInstance.getNumericString());
+        //     });
+
+        // });
+    </script>
+
     {{-- <script src="{{ asset('backend_mazer/js/extensions/sweetalert2.js') }}"></script> --}}
     <script src="{{ asset('backend_mazer/vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script>
@@ -220,6 +285,13 @@
                     // })
                 }
             });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.deleteBtn', function(e) {
+            e.preventDefault();
+            delete_id = $(this).attr("id");
+            $(".form_inventory_delete input[name=id_delete]").val(delete_id);
         });
     </script>
     <script>
@@ -279,6 +351,37 @@
                     Swal.fire({
                         icon: "error",
                         title: "Error trying to edit data to database !"
+                    })
+                }
+            });
+        });
+    </script>
+    <script>
+        // jQuery, bind an event handler or use some other way to trigger ajax call.
+        $('.form_inventory_delete').submit(function(event) {
+            event.preventDefault();
+            var table_event = $('#table1').DataTable();
+            $.ajax({
+                url: '{{ route('inventory_delete') }}',
+                type: 'post',
+                data: $('.form_inventory_delete')
+                    .serialize(), // Remember that you need to have your csrf token included
+                dataType: 'json',
+                success: function(_response) {
+                    // console.log(data);
+                    Swal.fire({
+                        icon: "success",
+                        title: "Deleted !"
+                    })
+                    $('#deleteModal').modal('hide');
+                    table_event.ajax.reload(null, false);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error trying to delete data to database !"
                     })
                 }
             });
@@ -351,9 +454,9 @@
                         width: "13%",
                         render: function(data, type, row) {
                             // Combine the first and last names into a single table field
-                            return '<div class="button" style="padding: 10px;"><a href="#" class="btn btn-danger editBtn" id=' +
+                            return '<div class="button" style="padding: 10px;"><a href="#" class="btn btn-danger deleteBtn" id=' +
                                 data.id +
-                                ' style="float: right;padding: 10px" data-bs-toggle="modal" data-bs-target="#">Delete</a>' +
+                                ' style="float: right;padding: 10px" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</a>' +
                                 ' <a href="#" class="btn btn-info editBtn" id=' +
                                 data.id +
                                 ' style="float: right;padding: 10px;margin-right: 10px;" data-bs-toggle="modal" data-bs-target="#inventoryModalEdit">Edit</a></div>';
