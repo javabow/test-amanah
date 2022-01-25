@@ -171,6 +171,9 @@ class InventoryController extends Controller
             $subhanallah = 0;
 
             foreach ($secret_array as $key => $value) {
+                if (!isset($split_int[$key])) {
+                    break;
+                }
                 if ($value == $split_int[$key]) {
                     $alhamdulillah++;
                 } else {
